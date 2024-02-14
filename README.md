@@ -1,3 +1,6 @@
-# projetD24
 
-Notre repo pour le TP1 pour notre cours Écosystème pour le développement de solutions mégadonnées.
+
+Commandes:
+docker-compose -f docker-compose.yml up -d
+
+-- Pour valider que la communication est ok: kafka-console-consumer.sh --topic sensordatainputfrancois --from-beginning --bootstrap-server localhost:9092 
