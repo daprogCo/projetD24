@@ -1,35 +1,56 @@
 from kafka import KafkaConsumer
+import json
+import sqlite3
 
-consumer= KafkaConsumer('sensordatainputfrancois', bootstrap_servers=['localhost:9092'], auto_offset_reset='earliest', enable_auto_commit=True, consumer_timeout_ms=1000)
+
+########################################################################################
+######    CONST
+LOG_bLOG = True  #logguer chaque entrées\save
+DB_bCLEANDB = True #Vider la table à chaque load du script
 
 
-def get_topic_data(dataraw):
-    print("hello")
-    print(dataraw)
-    token= dataraw.split()
-    print('Timestamp:{}'.format(token[0]))
-    print('Temperature:{}'.format(token[1]))
-    print('Niveau batterie:{}'.format(token[2]))
-    # print('Id:{}'.format(token[3]))
-    print('='* 50)
 
-def get_topic_data2v2(dataraw):
-    print('get_topic_data2v2:{}'.format(dataraw))
-    print(dataraw)
-    tokenb= dataraw.split()
-    print(len(tokenb))
-    tokenb_copy = tokenb.copy()
-    print(len(tokenb_copy))
+########################################################################################
+######    DATABASE
 
-    # moi=tokenb
-    # print(tokenb_copy[0])
-    # print(tokenb[0])
-    # print('Temperature:{}'.format(tokenb[1]))
-    # print('Niveau batterie:{}'.format(tokenb[2]))
+class DatabaseManager:
+    def __init__(self, db_name, clean_start=False):
+        self.conn = sqlite3.connect(db_name, check_same_thread=False)
+        self.conn.execute('''CREATE TABLE IF NOT EXISTS events
+                             (time TEXT, customer TEXT, action TEXT, device TEXT)''')
+        self.conn.commit()
+
+    def insert_event(self, event):
+        self.conn.execute("INSERT INTO events (time, customer, action, device) VALUES (?, ?, ?, ?)",
+                          (event['time'], event['customer'], event['action'], event['device']))
+        self.conn.commit()
+
+    def clean_table(self):
+        self.conn.execute('DELETE FROM events')
+        self.conn.commit()
+    def close(self):
+        self.conn.close()
+
+
+db_manager = DatabaseManager('data/consumer.db', DB_bCLEANDB)
+
+
+
+########################################################################################
+######    CONSUMER
+
+consumer = KafkaConsumer('sensordatainputfrancois', bootstrap_servers=['localhost:9092'], auto_offset_reset='earliest', enable_auto_commit=True, consumer_timeout_ms=1000)
+
 
 
 for message in consumer:
-    data=message.value.decode('utf-8')
-    print('Reception de data...')
-    get_topic_data2v2(data)
-    print(data)
+    data = message.value.decode('utf-8')
+    try:
+        events = json.loads(data)
+        for event in events:
+            db_manager.insert_event(event)
+            if LOG_bLOG :
+                print(f"Saved to DB - Time: {event['time']}, Customer: {event['customer']}, Action: {event['action']}, Device: {event['device']}")
+
+    except json.JSONDecodeError:
+        print("Erreur de décodage JSON")
