@@ -10,7 +10,7 @@
 
 - Utiliser Docker et les containers dockers
 - Utiliser un framework de traitement comme spark streaming (installation de l'outil seulement)
-- Utiliser un framework d'ingestion de données
+- Utiliser un framework d'ingestion de données 
 
 
 
