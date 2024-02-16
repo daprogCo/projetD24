@@ -57,19 +57,6 @@ def generate_data():
     return Response(donnees, mimetype='application/json')
 
 
-# @app.route('/sensordata_old')
-# def generate_data():
-#     donnees = traiter_prochain_fichier()
-#     print(donnees)
-
-
-    timestamp='{}'.format(datetime.now().isoformat())
-    temp_eau=str(round(random.uniform(10,35), 2))
-    niveau_batt=str(round(random.uniform(10,12), 2))
-    id=str(random.randint(1,99999))
-    enregistrement = str(timestamp +' ' + temp_eau +' ' + niveau_batt +' '  + id)
-
-    return Response(enregistrement, mimetype='text/plain')
 
 
 
