@@ -15,3 +15,20 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_CREATE_TOPICS: "sensordatainputfrancois:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+  hbase:
+    image: harisekhon/hbase
+    container_name: hbase
+    ports:
+      - 16010:16010
+      - 16020:16020
+      - 16030:16030
+      - 16040:16040
+      - 16060:16060
+      - 16070:16070
+    environment:
+      - HBASE_MANAGES_ZK=true
+    links:
+      - zookeeper
+    depends_on:
+      - zookeeper
