@@ -21,18 +21,13 @@ services:
     
   hbase:
     image: harisekhon/hbase
-    container_name: hbase
     ports:
+      - 8080:8080
+      - 8085:8085
+      - 16000:16000
       - 16010:16010
-      - 16020:16020
-      - 16030:16030
-      - 16040:16040
-      - 16060:16060
-      - 16070:16070
+      - 16201:16201
+      - 16301:16301
     environment:
       - HBASE_MANAGES_ZK=true
-    links:
-      - zookeeper
-    depends_on:
-      - zookeeper
 
