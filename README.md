@@ -26,3 +26,19 @@ docker-compose -f docker-compose.yml up -d
 ```
 kafka-console-consumer.sh --topic sensordatainputfrancois --from-beginning --bootstrap-server localhost:9092 
 ```
+
+
+
+#####HBASE:
+
+Aucune action requise, le code va automatiquement créé la base de données si elle n'existe pas
+
+- Pour créer la base de données manuellement dans HBase   
+```
+create 'events', 'info' 
+```
+
+- Pour lister le contenu de la DB HBase   
+```
+hbase shell
+```
