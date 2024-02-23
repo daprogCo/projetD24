@@ -17,7 +17,7 @@
 
 
 ---
-####Commandes:
+#### Commandes:
 
 ```
 docker-compose -f docker-compose.yml up -d
@@ -29,7 +29,7 @@ kafka-console-consumer.sh --topic sensordatainputfrancois --from-beginning --boo
 
 
 
-#####HBASE:
+##### HBASE:
 
 >Aucune action requise, le code va automatiquement créé la base de données si elle n'existe pas
 
@@ -59,7 +59,7 @@ truncate 'events'
 
 
 ---
-####Liens utiles:
+#### Liens utiles:
 
 - Pour voir le schema de la db  'events'  
 [http://localhost:8080/events/schema](http://localhost:8080/events/schema)
